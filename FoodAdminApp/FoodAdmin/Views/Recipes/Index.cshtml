@@ -1,0 +1,36 @@
+﻿@model List<FoodAdmin.Models.Recipe>
+
+<div class="container">
+    @foreach (var r in Model)
+    {
+        
+        <p>@r.title</p>
+        <p>@r.category</p>
+
+        <div>
+            
+            @foreach (var i in r.Ingridients)
+            {
+                
+                <p>@i.name</p>
+                <p>@i.quantity</p>
+                <p>@i.unitOfMeasurement</p>
+            }
+        </div>
+        @if (!r.isScheduledClassFor)
+        {<a asp-action="Create" asp-controller="CookingClasses" asp-route-id="@r.id" asp-route-recipeTitle="@r.title">Schedule Cooking Class</a>
+        }
+        else
+        {
+            <span>Already Scheduled class</span>
+
+            }
+
+
+      
+       @* <a asp-action="Edit" asp-route-id="@r.Id">Edit</a> <span class="text-muted">|</span>
+        <a asp-action="Delete" asp-route-id="@r.Id">Delete</a> <span class="text-muted">|</span>
+        <a asp-action="Details" asp-route-id="@r.Id">Details</a> <span class="text-muted">|</span>*@
+
+    }
+</div>

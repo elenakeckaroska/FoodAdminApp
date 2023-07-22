@@ -1,0 +1,49 @@
+﻿@model FoodAdmin.Models.CookingClasses
+
+<h1>Create</h1>
+
+<h4>Schedule Cooking Class for @Model.recipeTitle</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="link" class="control-label"></label>
+                <input asp-for="link" class="form-control" />
+                <span asp-validation-for="link" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="price" class="control-label"></label>
+                <input asp-for="price" class="form-control" />
+                <span asp-validation-for="price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="dateTime" class="control-label"></label>
+                <input asp-for="dateTime" class="form-control" />
+                <span asp-validation-for="dateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="maxParticipants" class="control-label"></label>
+                <input asp-for="maxParticipants" class="form-control" />
+                <span asp-validation-for="maxParticipants" class="text-danger"></span>
+            </div>
+          <input type="hidden" name="RecipeId" value="@Model.recipeId"/>
+            <input type="hidden" name="recipeTitle" value="@Model.recipeTitle" />
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
