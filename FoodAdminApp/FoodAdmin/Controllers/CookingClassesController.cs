@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 
@@ -18,6 +20,12 @@ namespace FoodAdmin.Controllers
 
 
         public IActionResult Index()
+        {
+            List<CookingClasses> cookingClasses = this.GetAllCookingClasses();
+            return View(cookingClasses);
+        }
+
+        public List<CookingClasses> GetAllCookingClasses()
         {
             HttpClient client = new HttpClient();
 
@@ -42,17 +50,18 @@ namespace FoodAdmin.Controllers
 
             List<CookingClassesUser> cookingClassesUsers = System.Text.Json.JsonSerializer.Deserialize<List<CookingClassesUser>>(result1);
 
-            foreach(var coookingClass in cookingClasses)
+            foreach (var coookingClass in cookingClasses)
             {
-                foreach(var classUser in cookingClassesUsers)
+                foreach (var classUser in cookingClassesUsers)
                 {
-                    if(coookingClass.id == classUser.cookingClassesID)
+                    if (coookingClass.id == classUser.cookingClassesID)
                     {
                         coookingClass.CookingClassesUser.Add(classUser);
                     }
                 }
             }
-            return View(cookingClasses);
+
+            return cookingClasses;
         }
         public IActionResult Create(Guid id, string recipeTitle)
         {
@@ -166,6 +175,84 @@ namespace FoodAdmin.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public IActionResult GetAllOrders()
+        {
+            HttpClient client = new HttpClient();
+
+            string URL = "https://localhost:44327/Order/GetOrders";
+
+            HttpResponseMessage response = client.GetAsync(URL).Result;
+
+
+            var result = response.Content.ReadAsStringAsync().Result;
+
+            List<Order> orders = System.Text.Json.JsonSerializer.Deserialize<List<Order>>(result);
+
+
+            List<CookingClasses> cookingClasses = this.GetAllCookingClasses();
+
+            
+
+
+
+            HttpClient client1 = new HttpClient();
+
+            string URL1 = "https://localhost:44327/CookingClasses/GetAllCookingClassesInOrderAdmin";
+
+            HttpResponseMessage response1 = client.GetAsync(URL1).Result;
+
+
+            var result1 = response1.Content.ReadAsStringAsync().Result;
+
+            List<CookingClassInOrder> classInOrder = System.Text.Json.JsonSerializer.Deserialize<List<CookingClassInOrder>>(result1);
+
+            foreach (var order in orders)
+            {
+                foreach (var classOrder in classInOrder)
+                {
+                    if (order.id == classOrder.orderId)
+                    {
+                        order.classesInOrder.Add(classOrder);
+                    }
+                }
+            }
+
+            var resultOrders = from order in orders
+                         from classOrder in order.classesInOrder
+                         join cookingClass in cookingClasses on classOrder.classId equals cookingClass.id
+                         select new
+                         {
+                             order.userId,
+                             order.username,
+                             CookingClassId = cookingClass.id,
+                             cookingClass.dateTime,
+                             cookingClass.price
+                         };
+
+
+            List<CookingClassViewModel> viewModel = resultOrders.Select(item => new CookingClassViewModel
+            {
+                Username = item.username,
+                Price = item.price,
+                RecipeTitle = GetRecipeTitle(item.CookingClassId) // Replace this with your logic to get the recipe title
+            }).ToList();
+
+            return View(viewModel);
+        }
+        private string GetRecipeTitle(Guid cookingClassId)
+        {
+            // Replace this with your logic to get the recipe title based on the cookingClassId
+            // You may need to fetch it from your existing collections or data sources
+            // For demonstration purposes, let's assume a simple dictionary lookup
+            List<CookingClasses> cookingClasses = this.GetAllCookingClasses();
+
+
+            return cookingClasses.Where(c => c.id == cookingClassId)
+                .Select(c => c.recipeTitle)
+                .FirstOrDefault();
+
+        }
 
     }
 }

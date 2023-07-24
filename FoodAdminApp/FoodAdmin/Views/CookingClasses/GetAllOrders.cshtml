@@ -1,0 +1,61 @@
+﻿@model List<FoodAdmin.Models.CookingClassViewModel>
+
+
+<h1>Cooking Class Information</h1>
+
+@* Add the select element to filter by users *@
+<div>
+    <label for="selectUser">Filter by User:</label>
+    <select id="selectUser">
+        <option value="">All Users</option>
+        @foreach (var order in Model.Select(o => o.Username).Distinct())
+        {
+            <option value="@order">@order</option>
+        }
+    </select>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Price</th>
+            <th>Recipe Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="user-row" data-username="@item.Username">
+                <td>@item.Username</td>
+                <td>@item.Price</td>
+                <td>@item.RecipeTitle</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        // Wrap the event listener inside a DOMContentLoaded event
+        document.addEventListener("DOMContentLoaded", function () {
+            // Add event listener to the select element
+            document.getElementById("selectUser").addEventListener("change", function () {
+                var selectedUser = this.value;
+                var userRows = document.getElementsByClassName("user-row");
+
+                // Show/hide rows based on selected user
+                for (var i = 0; i < userRows.length; i++) {
+                    var row = userRows[i];
+                    var username = row.dataset.username;
+
+                    if (selectedUser === "" || username === selectedUser) {
+                        row.style.display = "table-row";
+                    } else {
+                        row.style.display = "none";
+                    }
+                }
+            });
+        });
+    </script>
+}

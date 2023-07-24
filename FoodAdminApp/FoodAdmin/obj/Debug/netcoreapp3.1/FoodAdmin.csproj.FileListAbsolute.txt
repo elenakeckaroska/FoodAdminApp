@@ -366,3 +366,4 @@ C:\Users\User\Desktop\FoodApp\FoodAminApp\FoodAdminApp\FoodAdmin\bin\Debug\netco
 C:\Users\User\Desktop\FoodApp\FoodAminApp\FoodAdminApp\FoodAdmin\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
 C:\Users\User\Desktop\FoodApp\FoodAminApp\FoodAdminApp\FoodAdmin\obj\Debug\netcoreapp3.1\FoodAdmin.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\User\Desktop\FoodApp\FoodAminApp\FoodAdminApp\FoodAdmin\obj\Debug\netcoreapp3.1\Razor\Views\CookingClasses\Details.cshtml.g.cs
+C:\Users\User\Desktop\FoodApp\FoodAminApp\FoodAdminApp\FoodAdmin\obj\Debug\netcoreapp3.1\Razor\Views\CookingClasses\GetAllOrders.cshtml.g.cs

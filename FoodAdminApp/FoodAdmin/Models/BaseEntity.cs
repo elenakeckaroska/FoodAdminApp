@@ -6,6 +6,6 @@ namespace FoodApp.Models.Models
 {
     public class BaseEntity
     {
-        public Guid Id { get; set; }
+        public Guid id { get; set; }
     }
 }
